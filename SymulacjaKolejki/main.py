@@ -3,7 +3,6 @@ import csv
 
 import methods
 
-
 # 'lista_klientow' przechowuje wartosci bedace jednostkami czasu po ktorych dany 
 # klient przyszedl do banku
 lista_klientow = []
@@ -48,23 +47,49 @@ klient_index = 0  # indeks klienta w liście - ustawiony na 0 oznacza pierwsza o
 
 for minuta in range(480):  # 480 iteracji - kazda reprezentuje jedna minute - w sumie 8 godzin
 
-    # 
+    # Petla sprawdzajaca czy sa jeszcze jacys klienci oraz czy sa to klienci, ktorzy wedlug symulacji
+    # pojawia sie w obecnej chwili (mozliwe jest przybycie kilku o tej samej porze)
     while klient_index < len(lista_klientow) and lista_klientow[klient_index] == minuta:
+
+        # Jezeli istnieje klient ktory mial przyjsc o tej porze, zostaje dodany do kolejki
         kolejka.append((id_klienta, minuta))
+
+        # nastepnie zwiekszany jest indeks w celu sprawdzenia nastepnego klienta
         id_klienta += 1
         klient_index += 1
 
-    # Jeśli pracownik wolny i ktoś czeka w kolejce – obsłuż
+    # Jezeli nie ma juz wiecej klientow ktorzy mieli przyjsc o tej porze, program
+    # sprawdza czy pracownik banku jest wolny - jesli tak, przechodzi do obslugi osoby,
+    # ktora pierwsza czeka w kolejce (FIFO)
     if minuta >= czas_dostępny_pracownika and kolejka:
+
+        # przechowywane zostaja informacje o ID klienta oraz o czasie jego przybycia do banku
         klient_id, czas_przyjscia = kolejka.pop(0)
+
+        # czas rozpoczecia obslugi zostaje przypisany jako obecna minuta
         czas_rozpoczecia = minuta
-        # czas_obsługi = random.randint(5, 15)
-        czas_obsługi = int(methods.rozklad_wykladniczy(1 / 6))  # średnia 6 min, ale dużo 1–2 min i pojedyncze 20+
 
-        if czas_obsługi <=1:
-            czas_obsługi = 1
+        # losowany zostaje czas potrzebny pracownikowi na obsluzenie klienta
+        czas_obslugi = round(methods.rozklad_wykladniczy(1 / 6))
 
-        czas_zakonczenia = czas_rozpoczecia + czas_obsługi
+        '''
+        
+        'czasobsl' wylosowany zostaje z rozkladu wykladniczego
+        Odwrotnosc wartosci lambda wyrazenia 
+                
+                -math.log(u) / lambd
+
+        (gdzie u to losowa liczba z rozkładu jednostajnego (równomiernego) na przedziale (0,1))
+        oznacza srednia ilosc minut potrzebnych na obsluge
+        '''
+
+        # Zapewniony jest rowniez minimalny czas obslugi - 1 minuta
+        if czas_obslugi <=1:
+            czas_obslugi = 1
+
+        # obliczenie kiedy pracownik bedzie znow dostepny
+        # oraz ile klient musial czekac w kolejce
+        czas_zakonczenia = czas_rozpoczecia + czas_obslugi
         czas_oczekiwania = czas_rozpoczecia - czas_przyjscia
 
         dane_do_csv.append((str(klient_id), 
