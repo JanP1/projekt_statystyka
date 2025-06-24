@@ -74,7 +74,7 @@ for minuta in range(480):  # 480 iteracji - kazda reprezentuje jedna minute - w 
 
         '''
         
-        'czasobsl' wylosowany zostaje z rozkladu wykladniczego
+        'czas_obslugi' wylosowany zostaje z rozkladu wykladniczego
         Odwrotnosc wartosci lambda wyrazenia 
                 
                 -math.log(u) / lambd
