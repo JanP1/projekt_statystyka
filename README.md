@@ -30,9 +30,9 @@ Projekt przedstawia symulację działania systemu kolejkowego w banku z trzema s
 
 ---
 
-## Zakładane efekty kształcenia
+## Zakładane efekty 
 
-- Możliwość przeprowadzania testów statystycznych na danych wyjściowych, np. testy ANOVA w zależności od stanowiska lub dnia.
+- Możliwość przeprowadzania testów statystycznych na danych wyjściowych
 - Możliwość zastosowania regresji wielorakiej do modelowania wpływu długości kolejki, dnia i stanowiska na czas oczekiwania.
 - Symulacja stanowi przykład zastosowania **systemu kolejkowego z charakterystyką stochastyczną (M/M/c)** w praktyce.
 
