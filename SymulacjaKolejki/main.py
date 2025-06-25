@@ -5,7 +5,7 @@ import math
 import methods
 
 
-l_klientow_dziennie = int(input("Podaj liczbe klientow jaka przyjdzie do banku kazdego dnia: "))
+l_klientow_dziennie = int(input("Podaj ilu okolo klientow przyjdzie do banku kazdego dnia: "))
 szybkosc_pracownik1 = int(input("Podaj sredni czas obslugi 1. pracownika: "))
 szybkosc_pracownik2 = int(input("Podaj sredni czas obslugi 1. pracownika: "))
 szybkosc_pracownik3 = int(input("Podaj sredni czas obslugi 1. pracownika: "))
@@ -61,7 +61,10 @@ for dzien in range(1, 6): # 5 dni roboczych
 
 # lista zostaje wypełniona, losowane zostaja minuty po ktorych klient przyjdzie do banku
 
-    for i in range(l_klientow_dziennie):
+    l_klientow_tego_dnia = methods.w_okolicach_wartosci(l_klientow_dziennie)
+    print(dzien, 'dnia: ', l_klientow_tego_dnia, 'klientow')
+    
+    for i in range(l_klientow_tego_dnia):
         czas_przyjscia = int(random.gauss(240, 200))  # średnia=240, odchylenie=80
         if 0 <= czas_przyjscia <= 479:
             lista_klientow.append(czas_przyjscia)
