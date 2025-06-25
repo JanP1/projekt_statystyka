@@ -6,6 +6,8 @@ import methods
 
 
 l_klientow_dziennie = 60
+
+# ilosc cyfr w liczbie klientow na dzien potrzebna do generowania ID
 cyfry = math.floor(math.log10(l_klientow_dziennie)) + 1
 
 # --------------------------
