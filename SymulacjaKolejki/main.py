@@ -142,8 +142,9 @@ with open("symulacja_banku_godziny.csv", "w", newline="") as plik:
         start = methods.minuty_na_godzine(int(wiersz[2]))
         koniec = methods.minuty_na_godzine(int(wiersz[3]))
         oczekiwanie = wiersz[4]
+        dzien = wiersz[5]
 
-        writer.writerow([klient_id, przyjscie, start, koniec, oczekiwanie])
+        writer.writerow([klient_id, przyjscie, start, koniec, oczekiwanie, dzien])
 
 
 
