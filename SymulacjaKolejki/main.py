@@ -5,7 +5,13 @@ import math
 import methods
 
 
-l_klientow_dziennie = 60
+l_klientow_dziennie = int(input("Podaj liczbe klientow jaka przyjdzie do banku kazdego dnia: "))
+szybkosc_pracownik1 = int(input("Podaj sredni czas obslugi 1. pracownika: "))
+szybkosc_pracownik2 = int(input("Podaj sredni czas obslugi 1. pracownika: "))
+szybkosc_pracownik3 = int(input("Podaj sredni czas obslugi 1. pracownika: "))
+
+szybkosc_pracownik = [szybkosc_pracownik1, szybkosc_pracownik2, szybkosc_pracownik3]
+
 cyfry = math.floor(math.log10(l_klientow_dziennie)) + 1
 
 # --------------------------
@@ -17,11 +23,27 @@ dane_do_csv = [(
     "Czas_rozpoczecia_obslugi", 
     "Czas_zakonczenia_obslugi", 
     "Czas_oczekiwania",
-    "Dzien"
+    "Dzien",
+    "Stanowisko"
     )]
 # --------------------------
 # --------------------------
 
+'''
+
+Wizualizacja kolejki
+
+            [1]      [2]      [3]
+                      o        o
+                    
+                      o
+                      o
+                      o
+                      o
+                      o
+
+
+'''
 
 # ============================================================================================
 # =========================== Glowna petla symulacji ========================================
@@ -48,7 +70,8 @@ for dzien in range(1, 6): # 5 dni roboczych
 
 # zmienna okreslajaca czas w ktorym kasjer jest wolny - czas oznacza 
 # wartosc minutowa jaka uplynela od godziny 9:00 rownoznacznej wartosci 0
-    czas_dostępny_pracownika = 0
+    czas_dostępny_pracownika = [0, 0, 0]
+
 
 # lista 'kolejka' przechowywac bedzie indeksy klientow stojacych obecnie 
 # w kolejce oraz czas po jakim przyszli do banku - (id, minuty)
@@ -78,46 +101,52 @@ for dzien in range(1, 6): # 5 dni roboczych
         # Jezeli nie ma juz wiecej klientow ktorzy mieli przyjsc o tej porze, program
         # sprawdza czy pracownik banku jest wolny - jesli tak, przechodzi do obslugi osoby,
         # ktora pierwsza czeka w kolejce (FIFO)
-        if minuta >= czas_dostępny_pracownika and kolejka:
 
-            # przechowywane zostaja informacje o ID klienta oraz o czasie jego przybycia do banku
-            klient_id, czas_przyjscia = kolejka.pop(0)
 
-            # czas rozpoczecia obslugi zostaje przypisany jako obecna minuta
-            czas_rozpoczecia = minuta
-
-            # losowany zostaje czas potrzebny pracownikowi na obsluzenie klienta
-            czas_obslugi = round(methods.rozklad_wykladniczy(1 / 6))
-
-            '''
+        for stanow in range(3):
             
-            'czas_obslugi' wylosowany zostaje z rozkladu wykladniczego
-            Odwrotnosc wartosci lambda wyrazenia 
-                    
-                    -math.log(u) / lambd
+            # czy jakis nowy klient zaczal byc obslugiwany w tej minucie
+            if minuta >= czas_dostępny_pracownika[stanow] and kolejka:
+                # przechowywane zostaja informacje o ID klienta oraz o czasie jego przybycia do banku
+                klient_id, czas_przyjscia = kolejka.pop(0)
 
-            (gdzie u to losowa liczba z rozkładu jednostajnego (równomiernego) na przedziale (0,1))
-            oznacza srednia ilosc minut potrzebnych na obsluge
-            '''
+                # czas rozpoczecia obslugi zostaje przypisany jako obecna minuta
+                czas_rozpoczecia = minuta
 
-            # Zapewniony jest rowniez minimalny czas obslugi - 1 minuta
-            if czas_obslugi <=1:
-                czas_obslugi = 1
+                # losowany zostaje czas potrzebny pracownikowi na obsluzenie klienta
+                czas_obslugi = round(methods.rozklad_wykladniczy(1 / szybkosc_pracownik[stanow]))
 
-            # obliczenie kiedy pracownik bedzie znow dostepny
-            # oraz ile klient musial czekac w kolejce
-            czas_zakonczenia = czas_rozpoczecia + czas_obslugi
-            czas_oczekiwania = czas_rozpoczecia - czas_przyjscia
+                '''
+                
+                'czas_obslugi' wylosowany zostaje z rozkladu wykladniczego
+                Odwrotnosc wartosci lambda wyrazenia 
+                        
+                        -math.log(u) / lambd
 
-            dane_do_csv.append((str(klient_id + dzien*(10**cyfry)), 
-                                str(czas_przyjscia), 
-                                str(len(kolejka)),
-                                str(czas_rozpoczecia), 
-                                str(czas_zakonczenia), 
-                                str(czas_oczekiwania),
-                                str(dzien)))
+                (gdzie u to losowa liczba z rozkładu jednostajnego (równomiernego) na przedziale (0,1))
+                oznacza srednia ilosc minut potrzebnych na obsluge
+                '''
 
-            czas_dostępny_pracownika = czas_zakonczenia
+                # Zapewniony jest rowniez minimalny czas obslugi - 1 minuta
+                if czas_obslugi <=1:
+                    czas_obslugi = 1
+
+                # obliczenie kiedy pracownik bedzie znow dostepny
+                # oraz ile klient musial czekac w kolejce
+                czas_zakonczenia = czas_rozpoczecia + czas_obslugi
+                czas_oczekiwania = czas_rozpoczecia - czas_przyjscia
+
+                dane_do_csv.append((str(klient_id + dzien*(10**cyfry)), 
+                                    str(czas_przyjscia), 
+                                    str(len(kolejka)),
+                                    str(czas_rozpoczecia), 
+                                    str(czas_zakonczenia), 
+                                    str(czas_oczekiwania),
+                                    str(dzien), 
+                                    str(stanow + 1)
+                                    ))
+
+                czas_dostępny_pracownika[stanow] = czas_zakonczenia
 
 # =============================================================================================
 # =============================================================================================
@@ -136,7 +165,8 @@ with open("symulacja_banku_godziny.csv", "w", newline="") as plik:
         "Czas_rozpoczecia_obslugi", 
         "Czas_zakonczenia_obslugi", 
         "Czas_oczekiwania",
-        "Dzien"
+        "Dzien",
+        "Stanowisko"
     ])
 
     for wiersz in dane_do_csv[1:]:  # Pomijamy nagłówek
@@ -147,8 +177,9 @@ with open("symulacja_banku_godziny.csv", "w", newline="") as plik:
         koniec = methods.minuty_na_godzine(int(wiersz[4]))
         oczekiwanie = wiersz[5]
         dzien = wiersz[6]
+        stanowisko = wiersz[7]
 
-        writer.writerow([klient_id, przyjscie, dlugosc_kolejki, start, koniec, oczekiwanie, dzien])
+        writer.writerow([klient_id, przyjscie, dlugosc_kolejki, start, koniec, oczekiwanie, dzien, stanowisko])
 
 
 
