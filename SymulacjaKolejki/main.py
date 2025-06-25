@@ -12,9 +12,10 @@ cyfry = math.floor(math.log10(l_klientow_dziennie)) + 1
 # --- Nazwy kolumn w csv ---
 dane_do_csv = [(
     "ID", 
-    "Czas_przyjścia", 
-    "Czas_rozpoczęcia_obsługi", 
-    "Czas_zakończenia_obsługi", 
+    "Czas_przyjscia", 
+    "Dlugosc kolejki w momencie przyjscia",
+    "Czas_rozpoczecia_obslugi", 
+    "Czas_zakonczenia_obslugi", 
     "Czas_oczekiwania",
     "Dzien"
     )]
@@ -110,6 +111,7 @@ for dzien in range(1, 6): # 5 dni roboczych
 
             dane_do_csv.append((str(klient_id + dzien*(10**cyfry)), 
                                 str(czas_przyjscia), 
+                                str(len(kolejka)),
                                 str(czas_rozpoczecia), 
                                 str(czas_zakonczenia), 
                                 str(czas_oczekiwania),
@@ -129,22 +131,24 @@ with open("symulacja_banku_godziny.csv", "w", newline="") as plik:
     writer = csv.writer(plik)
     writer.writerow([
         "ID", 
-        "Czas_przyjścia", 
-        "Czas_rozpoczęcia_obsługi", 
-        "Czas_zakończenia_obsługi", 
-        "Czas_oczekiwania (min)",
+        "Czas_przyjscia", 
+        "Dlugosc kolejki w momencie przyjscia",
+        "Czas_rozpoczecia_obslugi", 
+        "Czas_zakonczenia_obslugi", 
+        "Czas_oczekiwania",
         "Dzien"
     ])
 
     for wiersz in dane_do_csv[1:]:  # Pomijamy nagłówek
         klient_id = wiersz[0]
         przyjscie = methods.minuty_na_godzine(int(wiersz[1]))
-        start = methods.minuty_na_godzine(int(wiersz[2]))
-        koniec = methods.minuty_na_godzine(int(wiersz[3]))
-        oczekiwanie = wiersz[4]
-        dzien = wiersz[5]
+        dlugosc_kolejki = wiersz[2]
+        start = methods.minuty_na_godzine(int(wiersz[3]))
+        koniec = methods.minuty_na_godzine(int(wiersz[4]))
+        oczekiwanie = wiersz[5]
+        dzien = wiersz[6]
 
-        writer.writerow([klient_id, przyjscie, start, koniec, oczekiwanie, dzien])
+        writer.writerow([klient_id, przyjscie, dlugosc_kolejki, start, koniec, oczekiwanie, dzien])
 
 
 
