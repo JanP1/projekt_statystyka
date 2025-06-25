@@ -33,7 +33,8 @@ dane_do_csv = [(
 for dzien in range(1, 6): # 5 dni roboczych
 
 # 'lista_klientow' przechowuje wartosci bedace jednostkami czasu po ktorych dany 
-# klient przyszedl do banku
+# klient przyszedl do banku - czas oznacza 
+# wartosc minutowa jaka uplynela od godziny 9:00 rownoznacznej wartosci 0
     lista_klientow = []
 
 # lista zostaje wypełniona, losowane zostaja minuty po ktorych klient przyjdzie do banku
