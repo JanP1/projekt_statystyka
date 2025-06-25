@@ -12,6 +12,8 @@ szybkosc_pracownik3 = int(input("Podaj sredni czas obslugi 1. pracownika: "))
 
 szybkosc_pracownik = [szybkosc_pracownik1, szybkosc_pracownik2, szybkosc_pracownik3]
 
+
+# ilosc cyfr w liczbie klientow na dzien potrzebna do generowania ID
 cyfry = math.floor(math.log10(l_klientow_dziennie)) + 1
 
 # --------------------------
@@ -53,7 +55,8 @@ Wizualizacja kolejki
 for dzien in range(1, 6): # 5 dni roboczych
 
 # 'lista_klientow' przechowuje wartosci bedace jednostkami czasu po ktorych dany 
-# klient przyszedl do banku
+# klient przyszedl do banku - czas oznacza 
+# wartosc minutowa jaka uplynela od godziny 9:00 rownoznacznej wartosci 0
     lista_klientow = []
 
 # lista zostaje wypełniona, losowane zostaja minuty po ktorych klient przyjdzie do banku
