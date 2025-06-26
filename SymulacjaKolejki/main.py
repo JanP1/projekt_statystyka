@@ -7,8 +7,8 @@ import methods
 
 l_klientow_dziennie = int(input("Podaj ilu okolo klientow przyjdzie do banku kazdego dnia: "))
 szybkosc_pracownik1 = int(input("Podaj sredni czas obslugi 1. pracownika: "))
-szybkosc_pracownik2 = int(input("Podaj sredni czas obslugi 1. pracownika: "))
-szybkosc_pracownik3 = int(input("Podaj sredni czas obslugi 1. pracownika: "))
+szybkosc_pracownik2 = int(input("Podaj sredni czas obslugi 2. pracownika: "))
+szybkosc_pracownik3 = int(input("Podaj sredni czas obslugi 3. pracownika: "))
 
 szybkosc_pracownik = [szybkosc_pracownik1, szybkosc_pracownik2, szybkosc_pracownik3]
 
